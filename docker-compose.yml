@@ -2,7 +2,7 @@ version: "2.1"
 services:
 
   inventory-client:
-    image: gitlab-registry.cern.ch/infra/inventory-client
+    image: gitlab-registry.cern.ch/webservices/infra/inventory-client
     volumes:
       - ./:/inventory_client
     depends_on:
@@ -11,7 +11,7 @@ services:
     # Inventory
       INVENTORY_ADDRESS: http://inventory:8080
 
-  inventory:git a
+  inventory:
     image: gitlab-registry.cern.ch/wkulma/wim-inventory
     ports:
       - "8080:8080"

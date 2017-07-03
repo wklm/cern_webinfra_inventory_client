@@ -12,7 +12,7 @@ from rest_framework import serializers
 
 class Inventory:
     def __init__(self):
-        self.api_root = 'http://localhost:8080' # os.environ['INVENTORY_ADDRESS']
+        self.api_root = os.environ['INVENTORY_ADDRESS']
         self.endpoints = [endpoint for endpoint in requests.get(self.api_root).json()]
 
     def add_instance(self, instance_type, properties):

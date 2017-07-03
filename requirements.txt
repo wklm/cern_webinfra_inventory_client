@@ -1,5 +1,3 @@
 requests
-StringIO
 django
 djangorestframework
-rest_framework
