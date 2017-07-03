@@ -1,0 +1,44 @@
+version: "2.1"
+services:
+
+  inventory-client:
+    image: gitlab-registry.cern.ch/infra/inventory-client
+    volumes:
+      - ./:/inventory_client
+    depends_on:
+      - inventory
+    environment:
+    # Inventory
+      INVENTORY_ADDRESS: http://inventory:8080
+
+  inventory:
+    image: gitlab-registry.cern.ch/wkulma/wim-inventory
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../wim-inventory:/django
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_NAME: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_NAME: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
