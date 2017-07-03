@@ -11,7 +11,7 @@ services:
     # Inventory
       INVENTORY_ADDRESS: http://inventory:8080
 
-  inventory:
+  inventory:git a
     image: gitlab-registry.cern.ch/wkulma/wim-inventory
     ports:
       - "8080:8080"
