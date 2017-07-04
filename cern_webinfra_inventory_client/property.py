@@ -5,6 +5,7 @@ class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
     def __init__(self, spec):
         self.spec = spec
 
+
         self.type = self._get_type(spec['type'])
         self.required = bool(spec['required'])
         self.read_only = bool(spec['read_only'])
@@ -17,13 +18,11 @@ class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
 
     @staticmethod
     def _get_type(t):
-        if t == 'integer': return int
-        if t == 'string':  return str
-        if t == 'boolean': return bool
-        if t == 'date':    return datetime.date
-        raise RuntimeError('Unmatched property type')
+        if t == 'integer':  return int
+        if t == 'string':   return str
+        if t == 'boolean':  return bool
+        if t == 'date': return datetime.date
+        if t == 'datetime': return datetime.datetime
+        raise RuntimeError('Unmatched property type {0}'.format(t))
     def __str__(self):
         return str(self.spec)
-
-    def validate(self):
-        ... # TODO

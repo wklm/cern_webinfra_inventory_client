@@ -6,7 +6,8 @@ services:
     volumes:
       - ./:/cern_webinfra_inventory_client
     depends_on:
-      - inventory
+      inventory:
+        condition: service_started
     environment:
     # Inventory
       INVENTORY_ADDRESS: http://inventory:8080
@@ -26,6 +27,11 @@ services:
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
+    healthcheck:
+      test: ["echo", "siema"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
   postgres:
     image: postgres
