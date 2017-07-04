@@ -36,7 +36,7 @@ def main():
             "tn_enabled": True
     }
 
-    a = Inventory().add_instance("drupal", instance_json)
+    Inventory().add_instance("drupal", instance_json)
 
 
 

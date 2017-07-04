@@ -22,6 +22,10 @@ class Inventory:
             model_name = self.model_names[instance_type]
             Model(model_name).validate(properties)
 
+            resp = requests.post(self.api_root + '/' + model_name + '/', properties)
+
+            print(resp.content)
+
         except KeyError:
             raise Exception(
                 'No model named %s. Available model names: %s'
