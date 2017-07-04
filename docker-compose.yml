@@ -4,7 +4,7 @@ services:
   inventory-client:
     image: gitlab-registry.cern.ch/webservices/infra/inventory-client
     volumes:
-      - ./:/inventory_client
+      - ./:/cern_webinfra_inventory_client
     depends_on:
       - inventory
     environment:
