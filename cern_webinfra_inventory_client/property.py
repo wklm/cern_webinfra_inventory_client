@@ -10,7 +10,7 @@ class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
         self.required = bool(spec['required'])
         self.read_only = bool(spec['read_only'])
         self.label = str(spec['label'])
-        if type(self.type) is int:
+        if type(self.tympe) is int:
             self.min_value = int(spec['min_value'])
             self.min_value = int(spec['max_value'])
         elif type(self.type) is str:
