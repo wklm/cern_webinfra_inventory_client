@@ -2,6 +2,8 @@ import os
 from io import BytesIO
 
 import requests
+from django.conf import settings
+settings.configure()
 from rest_framework.parsers import JSONParser
 
 from property import Property
