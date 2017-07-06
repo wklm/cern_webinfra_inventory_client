@@ -59,7 +59,7 @@ class Model:
                     properties.keys() - self.fields.keys())
         if key_diff:
             raise Exception(
-                'provided fields doesn\'t match the model %s. %s are missing'
+                'provided fields don\'t match the model %s. %s are missing'
                 % (self.endpoint, key_diff)
             )
         for key in self.fields:
