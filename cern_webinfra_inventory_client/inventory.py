@@ -56,7 +56,8 @@ class Model:
     def validate(self, properties):
         key_diff = (set(self.fields.keys()) - set(properties.keys()) or
                     set(properties.keys()) - set(self.fields.keys()))
-        if key_diff:
+
+        if not self._is_nullable(key_diff):
             raise InvalidSchema(self.endpoint, key_diff)
 
         for key in self.fields:
@@ -69,3 +70,10 @@ class Model:
                     provided_value,
                     validating_schema
                 )
+
+    @staticmethod
+    def _is_nullable(missing_properties):
+        for prop in missing_properties:
+            if prop.required:
+                return False
+        return True

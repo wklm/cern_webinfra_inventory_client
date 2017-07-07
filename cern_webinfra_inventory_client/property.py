@@ -1,5 +1,5 @@
 import datetime
-from inv_exceptions import UnmatchedPropertyType
+from exceptions import UnmatchedPropertyType
 
 
 class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
@@ -24,6 +24,7 @@ class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
         if t == 'date':     return datetime.date
         if t == 'datetime': return datetime.datetime
         raise UnmatchedPropertyType(t)
+
 
     def __str__(self):
         return str(self.spec)
