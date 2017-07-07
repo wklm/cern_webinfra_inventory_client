@@ -57,8 +57,8 @@ class Model:
         self.fields = dict(JSONParser().parse(self.schema)['actions']['POST'])
 
     def validate(self, properties):
-        key_diff = (self.fields.keys() - properties.keys() or
-                    properties.keys() - self.fields.keys())
+        key_diff = (set(self.fields.keys()) - set(properties.keys()) or
+                    set(properties.keys()) - set(self.fields.keys()))
         if key_diff:
             raise Exception(
                 'provided fields doesn\'t match the model %s. %s are missing'
