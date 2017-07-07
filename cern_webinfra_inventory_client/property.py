@@ -1,4 +1,5 @@
 import datetime
+from inv_exceptions import UnmatchedPropertyType
 
 
 class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
@@ -20,8 +21,9 @@ class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
         if t == 'integer':  return int
         if t == 'string':   return str
         if t == 'boolean':  return bool
-        if t == 'date': return datetime.date
+        if t == 'date':     return datetime.date
         if t == 'datetime': return datetime.datetime
-        raise RuntimeError('Unmatched property type {0}'.format(t))
+        raise UnmatchedPropertyType(t)
+
     def __str__(self):
         return str(self.spec)
