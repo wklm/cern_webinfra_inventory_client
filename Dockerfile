@@ -1,4 +1,4 @@
-FROM python
+FROM python:2.7
 
 ADD . /cern_webinfra_inventory_client
 

@@ -1,6 +1,3 @@
-from django.conf import settings
-settings.configure()
-
 from inventory import Inventory, Model
 from property import Property
 
