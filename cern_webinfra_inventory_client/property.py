@@ -23,8 +23,8 @@ class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
         if t == 'boolean':  return bool
         if t == 'date':     return datetime.date
         if t == 'datetime': return datetime.datetime
+        if t == 'choice':   return str
         raise UnmatchedPropertyType(t)
-
 
     def __str__(self):
         return str(self.spec)

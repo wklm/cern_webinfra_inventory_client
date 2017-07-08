@@ -29,10 +29,11 @@ def main():
             "description": "eriufjhreiufh",
             "endpoint": "eferfre",
             "status": "qdqwd",
-            "tn_enabled": True
+            "tn_enabled": True,
+            "path": "/"
     }
 
-    Inventory().add_instance("drupal", instance_json)
+    Inventory().add_instance("iis", instance_json)
 
 
 

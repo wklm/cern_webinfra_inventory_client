@@ -29,12 +29,14 @@ class Inventory:
             model_name = self.model_names[instance_type]
 
             Model(model_name).validate(properties)
-
+            import pdb
+            pdb.set_trace()
             resp = requests.post(self.api_root + '/' + model_name + '/', properties)
+            import pdb
+            pdb.set_trace()
             print(resp.content)
         except KeyError:
-            # raise ModelNotFound(instance_type, self.model_names)
-            print(instance_type in self.model_names)
+            raise ModelNotFound(instance_type, self.model_names)
 
     @staticmethod
     def get_instance_fields(instance_name):
