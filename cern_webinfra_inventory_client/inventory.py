@@ -64,6 +64,9 @@ class Model:
                         validating_schema
                     )
             except KeyError:
+                if key not in properties:
+                    print(key, 'doesn\'t belong to', properties)
+                    continue
                 key_diff = (
                     set(self.fields.keys()) - set(properties.keys())
                     or
@@ -71,8 +74,6 @@ class Model:
                 )
                 if not self._is_nullable(key_diff):
                     raise InvalidSchema(self.endpoint, key_diff)
-                if key not in properties:
-                    print(key, 'doesn\'t belong to', properties)
 
     def _is_nullable(self, missing_properties):
         for prop in missing_properties:
