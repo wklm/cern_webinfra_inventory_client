@@ -3,18 +3,6 @@ from inventory import Inventory, Model
 import datetime
 def main():
     instance_json = {
-            "db_host": "test.cern.ch",
-            "db_port": 8080,
-            "db_user": "zbyszek",
-            "db_password": "pass",
-            "db_database": "db",
-            "admin_egroup": "group",
-            "enforce_SSO": True,
-            "lb_name": "aaa",
-            # "lb_ip": "23232323",
-            "site_folder": "jeroijgoreijg",
-            "drush_alias": "eriugjierug",
-            "vhost_name": "geoirjgoierjg",
             "name": "ergkoeprkg",
             "full_domain": "rokgeropkg",
             "owner": "erokgpoerg",
@@ -30,7 +18,6 @@ def main():
             "endpoint": "eferfre",
             "status": "qdqwd",
             "tn_enabled": True,
-            "path": "/"
     }
 
     Inventory().add_instance("iis", instance_json)

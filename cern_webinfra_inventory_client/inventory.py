@@ -71,6 +71,8 @@ class Model:
                 )
                 if not self._is_nullable(key_diff):
                     raise InvalidSchema(self.endpoint, key_diff)
+                if key not in properties:
+                    print(key, 'doesn\'t belong to', properties)
 
     def _is_nullable(self, missing_properties):
         for prop in missing_properties:
