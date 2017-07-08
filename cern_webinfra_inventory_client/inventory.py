@@ -9,7 +9,7 @@ from rest_framework.parsers import JSONParser
 
 from property import Property
 
-from exceptions import ModelNotFound, InvalidSchema, InvalidPropertyType
+from cern_webinfra_inventory_client.exceptions import ModelNotFound, InvalidSchema, InvalidPropertyType
 
 
 class Inventory:
@@ -18,18 +18,23 @@ class Inventory:
         self.endpoints = [endpoint
                           for endpoint in requests.get(self.api_root).json()]
 
-        self.model_names = {model_name.split('/')[2]: model_name
-                            for model_name in self.endpoints}
+        self.model_names = {
+            str(model_name.split('/')[2]): model_name
+            for model_name in self.endpoints
+        }
 
     def add_instance(self, instance_type, properties):
 
         try:
             model_name = self.model_names[instance_type]
+
             Model(model_name).validate(properties)
+
             resp = requests.post(self.api_root + '/' + model_name + '/', properties)
             print(resp.content)
         except KeyError:
-            raise ModelNotFound(instance_type, self.model_names)
+            # raise ModelNotFound(instance_type, self.model_names)
+            print(instance_type in self.model_names)
 
     @staticmethod
     def get_instance_fields(instance_name):
@@ -54,26 +59,28 @@ class Model:
         self.fields = dict(JSONParser().parse(self.schema)['actions']['POST'])
 
     def validate(self, properties):
-        key_diff = (set(self.fields.keys()) - set(properties.keys()) or
-                    set(properties.keys()) - set(self.fields.keys()))
-
-        if not self._is_nullable(key_diff):
-            raise InvalidSchema(self.endpoint, key_diff)
-
         for key in self.fields:
-            validating_schema = Property(self.fields[key])
-            provided_value = properties[key]
+            try:
+                validating_schema = Property(self.fields[key])
+                provided_value = properties[key]
 
-            if type(provided_value) is not validating_schema.type:
-                raise InvalidPropertyType(
-                    key,
-                    provided_value,
-                    validating_schema
+                if type(provided_value) is not validating_schema.type:
+                    raise InvalidPropertyType(
+                        key,
+                        provided_value,
+                        validating_schema
+                    )
+            except KeyError:
+                key_diff = (
+                    set(self.fields.keys()) - set(properties.keys())
+                    or
+                    set(properties.keys()) - set(self.fields.keys())
                 )
+                if not self._is_nullable(key_diff):
+                    raise InvalidSchema(self.endpoint, key_diff)
 
-    @staticmethod
-    def _is_nullable(missing_properties):
+    def _is_nullable(self, missing_properties):
         for prop in missing_properties:
-            if prop.required:
+            if self.fields[prop]['required']:
                 return False
         return True

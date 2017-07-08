@@ -1,5 +1,5 @@
 import datetime
-from exceptions import UnmatchedPropertyType
+from cern_webinfra_inventory_client.exceptions import UnmatchedPropertyType
 
 
 class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!

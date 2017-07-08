@@ -11,6 +11,8 @@ class ModelNotFound(Exception):
         self.model = model
         self.model_names = model_names
 
+        import pdb
+        pdb.set_trace()
     def __str__(self):
         return 'No model named {0}. Available model names: {1}' \
             .format(self.model, [name for name in self.model_names.keys()])
@@ -31,6 +33,8 @@ class InvalidPropertyType(Exception):
         self.key = key
         self.provided_value = provided_value
         self.validating_schema = validating_schema
+        import pdb
+        pdb.set_trace()
 
     def __str__(self):
         return '{0}: {1} is a {2}, but should be: {3}'.format(

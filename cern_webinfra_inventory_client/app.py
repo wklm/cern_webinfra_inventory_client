@@ -1,5 +1,4 @@
 from inventory import Inventory, Model
-from property import Property
 
 import datetime
 def main():
@@ -11,8 +10,8 @@ def main():
             "db_database": "db",
             "admin_egroup": "group",
             "enforce_SSO": True,
-            "lb_name": datetime.datetime(2005, 7, 14, 12, 30),
-            "lb_ip": "23232323",
+            "lb_name": "aaa",
+            # "lb_ip": "23232323",
             "site_folder": "jeroijgoreijg",
             "drush_alias": "eriugjierug",
             "vhost_name": "geoirjgoierjg",
@@ -39,4 +38,5 @@ def main():
 
 
 if __name__ == '__main__':
+
     main()
