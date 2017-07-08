@@ -11,8 +11,6 @@ class ModelNotFound(Exception):
         self.model = model
         self.model_names = model_names
 
-        import pdb
-        pdb.set_trace()
     def __str__(self):
         return 'No model named {0}. Available model names: {1}' \
             .format(self.model, [name for name in self.model_names.keys()])

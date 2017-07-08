@@ -5,7 +5,6 @@ from cern_webinfra_inventory_client.exceptions import UnmatchedPropertyType
 class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
     def __init__(self, spec):
         self.spec = spec
-
         self.type = self._get_type(spec['type'])
         self.required = bool(spec['required'])
         self.read_only = bool(spec['read_only'])

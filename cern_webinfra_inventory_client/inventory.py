@@ -1,40 +1,31 @@
 import os
 from io import BytesIO
-
 import requests
 from django.conf import settings
 
 settings.configure()
 from rest_framework.parsers import JSONParser
-
 from property import Property
-
 from cern_webinfra_inventory_client.exceptions import ModelNotFound, InvalidSchema, InvalidPropertyType
 
 
 class Inventory:
     def __init__(self):
         self.api_root = os.environ['INVENTORY_ADDRESS']
-        self.endpoints = [endpoint
-                          for endpoint in requests.get(self.api_root).json()]
-
+        self.endpoints = [
+            endpoint for endpoint in requests.get(self.api_root).json()
+        ]
         self.model_names = {
             str(model_name.split('/')[2]): model_name
             for model_name in self.endpoints
         }
 
     def add_instance(self, instance_type, properties):
-
         try:
             model_name = self.model_names[instance_type]
-
             Model(model_name).validate(properties)
-            import pdb
-            pdb.set_trace()
             resp = requests.post(self.api_root + '/' + model_name + '/', properties)
-            import pdb
-            pdb.set_trace()
-            print(resp.content)
+            print('Inventory response:', resp.content)
         except KeyError:
             raise ModelNotFound(instance_type, self.model_names)
 
