@@ -61,7 +61,7 @@ class Model:
             try:
                 provided_value = properties[key]
             except KeyError:
-                raise
+                continue
 
             if type(provided_value) is not validating_schema.type:
                 raise InvalidPropertyType(
