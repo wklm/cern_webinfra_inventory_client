@@ -58,7 +58,10 @@ class Model:
                 raise MissingProperties(self.endpoint, key)
 
             validating_schema = Property(self.fields[key])
-            provided_value = properties[key]
+            try:
+                provided_value = properties[key]
+            except KeyError:
+                raise
 
             if type(provided_value) is not validating_schema.type:
                 raise InvalidPropertyType(
