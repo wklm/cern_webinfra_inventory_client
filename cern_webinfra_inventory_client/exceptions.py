@@ -16,14 +16,25 @@ class ModelNotFound(Exception):
             .format(self.model, [name for name in self.model_names.keys()])
 
 
-class InvalidSchema(Exception):
+class MissingProperties(Exception):
     def __init__(self, endpoint, key_diff):
         self.endpoint = endpoint
         self.key_diff = key_diff
 
     def __str__(self):
-        return 'provided fields don\'t match the model {0}. {1} are missing' \
+        return 'provided fields don\'t match the model {0}. {1} is missing' \
             .format(self.endpoint, self.key_diff)
+
+
+class UnknownProperty(Exception):
+    def __init__(self, key, endpoint):
+        self.endpoint = endpoint
+        self.key = key
+
+    def __str__(self):
+        return 'invalid property {0} for endpoint {1}'.format(
+            self.key, self.endpoint
+        )
 
 
 class InvalidPropertyType(Exception):
@@ -31,13 +42,12 @@ class InvalidPropertyType(Exception):
         self.key = key
         self.provided_value = provided_value
         self.validating_schema = validating_schema
-        import pdb
-        pdb.set_trace()
+
 
     def __str__(self):
         return '{0}: {1} is a {2}, but should be: {3}'.format(
-            key,
-            provided_value,
-            type(provided_value),
-            validating_schema.type
+            self.key,
+            str(self.provided_value),
+            type(self.provided_value),
+            self.validating_schema.type
         )

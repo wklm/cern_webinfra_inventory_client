@@ -6,7 +6,7 @@ from django.conf import settings
 settings.configure()
 from rest_framework.parsers import JSONParser
 from property import Property
-from cern_webinfra_inventory_client.exceptions import ModelNotFound, InvalidSchema, InvalidPropertyType
+from exceptions import ModelNotFound, MissingProperties, InvalidPropertyType
 
 
 class Inventory:
@@ -24,8 +24,9 @@ class Inventory:
         try:
             model_name = self.model_names[instance_type]
             Model(model_name).validate(properties)
-            resp = requests.post(self.api_root + '/' + model_name + '/', properties)
-            print('Inventory response:', resp.content)
+            return requests.post(
+                self.api_root + '/' + model_name + '/', properties
+            )
         except KeyError:
             raise ModelNotFound(instance_type, self.model_names)
 
@@ -53,30 +54,20 @@ class Model:
 
     def validate(self, properties):
         for key in self.fields:
-            try:
-                validating_schema = Property(self.fields[key])
-                provided_value = properties[key]
+            if key not in properties and not self._is_nullable(key):
+                raise MissingProperties(self.endpoint, key)
 
-                if type(provided_value) is not validating_schema.type:
-                    raise InvalidPropertyType(
-                        key,
-                        provided_value,
-                        validating_schema
-                    )
-            except KeyError:
-                if key not in properties:
-                    print(key, 'doesn\'t belong to', properties)
-                    continue
-                key_diff = (
-                    set(self.fields.keys()) - set(properties.keys())
-                    or
-                    set(properties.keys()) - set(self.fields.keys())
+            validating_schema = Property(self.fields[key])
+            provided_value = properties[key]
+
+            if type(provided_value) is not validating_schema.type:
+                raise InvalidPropertyType(
+                    key,
+                    provided_value,
+                    validating_schema
                 )
-                if not self._is_nullable(key_diff):
-                    raise InvalidSchema(self.endpoint, key_diff)
 
-    def _is_nullable(self, missing_properties):
-        for prop in missing_properties:
-            if self.fields[prop]['required']:
-                return False
+    def _is_nullable(self, key):
+        if self.fields[key]['required']:
+            return False
         return True
