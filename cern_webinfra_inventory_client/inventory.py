@@ -24,7 +24,8 @@ class Inventory:
         try:
             model_name = self.model_names[instance_type]
             Model(model_name).validate(properties)
-            return requests.post(
+
+            return self.get_instance(properties.name) or requests.post(
                 self.api_root + '/' + model_name + '/', properties
             )
         except KeyError:
@@ -34,8 +35,13 @@ class Inventory:
     def get_instance_fields(instance_name):
         return Model(instance_name).fields
 
-    def get_instances(self, instance_type):
-        pass
+    def get_instance(self, instance_name):
+        resp = requests.get(
+            self.api_root + '/rest/namespace/instance?name=' + instance_name
+        )
+        if resp.status_code == 200:
+            return resp
+        return None
 
     @staticmethod
     def deserialize_property(property):
