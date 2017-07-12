@@ -25,7 +25,7 @@ class Inventory:
             model_name = self.model_names[instance_type]
             Model(model_name).validate(properties)
 
-            return self.get_instance(properties.name) or requests.post(
+            return self.get_instance(properties['name']) or requests.post(
                 self.api_root + '/' + model_name + '/', properties
             )
         except KeyError:
