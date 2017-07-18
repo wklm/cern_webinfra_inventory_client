@@ -5,8 +5,8 @@ from django.conf import settings
 
 settings.configure()
 from rest_framework.parsers import JSONParser
-from property import Property
-from exceptions import ModelNotFound, MissingProperties, InvalidPropertyType
+from .property import Property
+from .exceptions import ModelNotFound, MissingProperties, InvalidPropertyType
 
 
 class Inventory:

@@ -1,5 +1,5 @@
 import datetime
-from exceptions import UnmatchedPropertyType
+from .exceptions import UnmatchedPropertyType
 
 
 class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
