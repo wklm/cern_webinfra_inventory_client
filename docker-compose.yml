@@ -2,49 +2,46 @@ version: "2.1"
 services:
 
   inventory-client:
-    image: gitlab-registry.cern.ch/webservices/infra/inventory-client
+    build: .
     volumes:
       - ./:/cern_webinfra_inventory_client
-    depends_on:
-      inventory:
-        condition: service_started
     environment:
     # Inventory
       INVENTORY_ADDRESS: http://inventory:8080
 
-  inventory:
-    image: gitlab-registry.cern.ch/wkulma/wim-inventory
-    ports:
-      - "8080:8080"
-    volumes:
-      - ../wim-inventory:/django
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      POSTGRES_NAME: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-    healthcheck:
-      test: ["echo", ""]
-      interval: 30s
-      timeout: 30s
-      retries: 3
-
   postgres:
-    image: postgres
+    image: registry.access.redhat.com/rhscl/postgresql-94-rhel7
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_NAME: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 30s
-      timeout: 30s
-      retries: 3
+      POSTGRESQL_USER: admin
+      POSTGRESQL_PASSWORD: verystr0ngpassword
+      POSTGRESQL_DATABASE: webinfra
+
+  inventory:
+    image: wklm/cern-webinfra-inventory
+    ports:
+      - "8080:8080"
+    environment:
+     # Postgres
+      POSTGRESQL_HOST: postgres
+      POSTGRESQL_PORT: 5432
+      POSTGRESQL_USER: admin
+      POSTGRESQL_PASSWORD: verystr0ngpassword
+      POSTGRESQL_DATABASE: webinfra
+    depends_on:
+      - postgres 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

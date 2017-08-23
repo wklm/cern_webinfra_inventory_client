@@ -43,7 +43,6 @@ class InvalidPropertyType(Exception):
         self.provided_value = provided_value
         self.validating_schema = validating_schema
 
-
     def __str__(self):
         return '{0}: {1} is a {2}, but should be: {3}'.format(
             self.key,
@@ -51,3 +50,19 @@ class InvalidPropertyType(Exception):
             type(self.provided_value),
             self.validating_schema.type
         )
+
+
+class EntryAlreadyExists(Exception):
+    def __init__(self, instance_type, properties):
+        self.instance_type = instance_type
+        self.properties = properties
+
+    def __str__(self):
+        return 'Site {0} already exists'\
+            .format(self.properties['name]'])
+
+
+class InternalInventoryError(Exception):
+    def __str__(self):
+        return "Internal Inventory error occurred, " \
+               "check Inventory service logs"

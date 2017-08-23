@@ -16,8 +16,9 @@ class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
     def __init__(self, spec):
         self.spec = spec
         self.type = self.TYPES_MAPPING.get(spec['type'], None)
-        if not self.type: raise UnmatchedPropertyType(t)
-
+        if not self.type: raise UnmatchedPropertyType(
+            spec['type']
+        )
         self.required = bool(spec['required'])
         self.read_only = bool(spec['read_only'])
         self.label = str(spec['label'])

@@ -6,7 +6,8 @@ from django.conf import settings
 settings.configure()
 from rest_framework.parsers import JSONParser
 from .property import Property
-from .exceptions import ModelNotFound, MissingProperties, InvalidPropertyType
+from .exceptions import ModelNotFound, MissingProperties, \
+    InvalidPropertyType, EntryAlreadyExists, InternalInventoryError
 
 
 class Inventory:
@@ -21,32 +22,38 @@ class Inventory:
         }
 
     def add_instance(self, instance_type, properties):
+        if self._entry_exists(instance_type, properties):
+            raise EntryAlreadyExists(instance_type, properties)
         try:
             model_name = self.model_names[instance_type]
             Model(model_name).validate(properties)
-
             return requests.post(
                 self.api_root + '/' + model_name + '/', properties
             )
         except KeyError:
             raise ModelNotFound(instance_type, self.model_names)
 
+    def _entry_exists(self, instance_type, properties):
+        entries = self.get_instance(instance_type)
+        for site in entries.json():
+            if site['name'] == properties['name']:
+                return True
+        return False
+
     @staticmethod
     def get_instance_fields(instance_name):
         return Model(instance_name).fields
 
-    def get_instance(self, instance_name):
+    def get_instance(self, instance_type):
         resp = requests.get(
-            self.api_root + '/rest/namespace/instance?name=' + instance_name
+            self.api_root + '/rest/namespace/' + instance_type
         )
         if resp.status_code == 200:
             return resp
-        return None
-
-    @staticmethod
-    def deserialize_property(property):
-        return property
-
+        if resp.status_code == 404:
+            raise ModelNotFound(instance_type, self.model_names)
+        if resp.status_code == 500:
+            raise InternalInventoryError()
 
 class Model:
     def __init__(self, endpoint):
@@ -56,7 +63,10 @@ class Model:
                 Inventory().api_root + '/' + self.endpoint + '/?format=json'
             ).content
         )
-        self.fields = dict(JSONParser().parse(self.schema)['actions']['POST'])
+        self.fields = dict(
+            JSONParser()
+                .parse(self.schema)['actions']['POST']
+        )
 
     def validate(self, properties):
         for key in self.fields:
@@ -64,7 +74,7 @@ class Model:
                 raise MissingProperties(self.endpoint, key)
 
             validating_schema = Property(self.fields[key])
-            try:
+            try: # TODO: ...
                 provided_value = properties[key]
             except KeyError:
                 continue
@@ -77,6 +87,4 @@ class Model:
                 )
 
     def _is_nullable(self, key):
-        if self.fields[key]['required']:
-            return False
-        return True
+        return not self.fields[key]['required']
