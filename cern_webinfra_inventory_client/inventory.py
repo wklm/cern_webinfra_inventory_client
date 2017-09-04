@@ -35,10 +35,10 @@ class Inventory:
             raise ModelNotFound(instance_type, self.model_names)
 
     def edit_instance(self, name, properties):
-        raise NotImplemented
+        raise NotImplementedError
 
     def delete_instance(self, name):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _entry_exists(self, instance_type, properties):
         entries = self.get_instance(instance_type)
