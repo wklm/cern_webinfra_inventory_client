@@ -1,5 +1,6 @@
 import os
 from io import BytesIO
+
 import requests
 from django.conf import settings
 
@@ -33,6 +34,12 @@ class Inventory:
         except KeyError:
             raise ModelNotFound(instance_type, self.model_names)
 
+    def edit_instance(self, name, properties):
+        raise NotImplemented
+
+    def delete_instance(self, name):
+        raise NotImplemented
+
     def _entry_exists(self, instance_type, properties):
         entries = self.get_instance(instance_type)
         for site in entries.json():
@@ -55,6 +62,7 @@ class Inventory:
         if resp.status_code == 500:
             raise InternalInventoryError()
 
+
 class Model:
     def __init__(self, endpoint):
         self.endpoint = endpoint
@@ -74,7 +82,7 @@ class Model:
                 raise MissingProperties(self.endpoint, key)
 
             validating_schema = Property(self.fields[key])
-            try: # TODO: ...
+            try:  # TODO: ...
                 provided_value = properties[key]
             except KeyError:
                 continue
