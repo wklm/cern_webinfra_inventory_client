@@ -13,7 +13,7 @@ from .exceptions import ModelNotFound, MissingProperties, \
 
 class Inventory:
     def __init__(self):
-        self.api_root = os.environ['INVENTORY_ADDRESS']
+        self.api_root = os.environ['INVENTORY_URL']
         self.endpoints = [
             endpoint for endpoint in requests.get(self.api_root).json()
         ]
