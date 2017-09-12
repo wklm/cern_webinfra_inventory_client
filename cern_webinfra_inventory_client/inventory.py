@@ -31,12 +31,12 @@ class Inventory:
             )
         raise EntryAlreadyExists(instance_type, properties)
 
-    def edit_instance(self, i_type, i_name, edited_property, value):
-        model = self._get_model(i_type)
-        if edited_property not in model.fields:
-            raise UnknownProperty(edited_property, model.endpoint)
-        entry = self._get_entry(i_name, i_type)
-        entry[edited_property] = value
+    def edit_instance(self, instance_type, instance_name, edited_prop, value):
+        model = self._get_model(instance_type)
+        if edited_prop not in model.fields:
+            raise UnknownProperty(edited_prop, model.endpoint)
+        entry = self._get_entry(instance_name, instance_type)
+        entry[edited_prop] = value
         model.validate(entry)
         return requests.put(
             self.api_root + '/' + model.endpoint + '/', entry
