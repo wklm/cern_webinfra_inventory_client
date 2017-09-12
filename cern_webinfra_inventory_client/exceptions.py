@@ -58,8 +58,12 @@ class EntryAlreadyExists(Exception):
         self.properties = properties
 
     def __str__(self):
-        return 'Site {0} already exists'\
+        return 'Site {0} already exists' \
             .format(self.properties['name]'])
+
+
+class EntryNotFound(Exception):
+    ...
 
 
 class InternalInventoryError(Exception):
