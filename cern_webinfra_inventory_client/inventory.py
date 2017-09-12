@@ -24,7 +24,7 @@ class Inventory:
         }
 
     def add_instance(self, instance_type, properties):
-        if self._get_entry(properties['name'], instance_type) is None:
+        if not self._get_entry(properties['name'], instance_type):
             model = self._get_model(instance_type, properties)
             return requests.post(
                 self.api_root + '/' + model.endpoint + '/', properties
@@ -43,7 +43,9 @@ class Inventory:
         )
 
     def delete_instance(self, name):
-        raise NotImplementedError
+        return requests.delete(
+            self.api_root + '/rest/namespace/instance/?name=' + name
+        )
 
     def _get_model(self, instance_type, properties=None):
         try:
