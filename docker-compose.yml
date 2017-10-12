@@ -7,7 +7,7 @@ services:
       - ./:/cern_webinfra_inventory_client
     environment:
     # Inventory
-      INVENTORY_ADDRESS: http://inventory:8080
+      INVENTORY_URL: http://inventory:8080
 
   postgres:
     image: registry.access.redhat.com/rhscl/postgresql-94-rhel7
