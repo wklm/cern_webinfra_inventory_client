@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
 setup(
     name='cern_webinfra_inventory_client',
     packages=['cern_webinfra_inventory_client'],
-    version='0.0.2',
+    version='0.0.3',
     description='Library for managing CERN web infrastructure inventory',
     author='CERN / Wojciech Kulma',
     author_email='wojciech.kulma@cern.ch',
