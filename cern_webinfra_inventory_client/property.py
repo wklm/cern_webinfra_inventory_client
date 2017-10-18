@@ -1,9 +1,9 @@
 import datetime
-from .exceptions import UnmatchedPropertyType
+# from .exceptions import UnmatchedPropertyType
 
 
 class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
-    
+
     TYPES_MAPPING = {
         'integer':  int,
         'string':   str,
@@ -12,13 +12,15 @@ class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
         'datetime': datetime.datetime,
         'choice':   str,
     }
-    
+
     def __init__(self, spec):
         self.spec = spec
         self.type = self.TYPES_MAPPING.get(spec['type'], None)
-        if not self.type: raise UnmatchedPropertyType(
-            spec['type']
-        )
+        if not self.type:
+            pass
+#            raise UnmatchedPropertyType(
+#            spec['type']
+#        )
         self.required = bool(spec['required'])
         self.read_only = bool(spec['read_only'])
         self.label = str(spec['label'])
@@ -27,6 +29,6 @@ class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
             self.min_value = int(spec['max_value'])
         elif type(self.type) is str:
             self.max_length = spec['max_length']
-            
+
     def __str__(self):
         return str(self.spec)
