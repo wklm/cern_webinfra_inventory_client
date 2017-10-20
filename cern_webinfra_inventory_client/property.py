@@ -9,7 +9,7 @@ class Property:  # TODO: !!! PROPER DESERIALIZATION WITH A TYPE SYSTEM !!!
         'string':   str,
         'boolean':  bool,
         'date':     datetime.date,
-        'datetime': datetime.datetime,
+        'datetime': str,
         'choice':   str,
     }
 
